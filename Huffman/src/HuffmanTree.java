@@ -1,6 +1,7 @@
 import java.util.HashMap;
 import java.util.Map;
 import java.util.PriorityQueue;
+import java.util.Queue;
 
 /**
  * @author Ella Nicolson and Rachel Swoap
@@ -8,16 +9,16 @@ import java.util.PriorityQueue;
  */
 public class HuffmanTree {
 	
-	PriorityQueue<Node> tree;
+	private static Queue<Node> tree;
 	
 
 	public HuffmanTree(Map<Short, Integer> m) {
 		tree = new PriorityQueue<Node>();
-		tree.add(new Node(m.get(32), (short) 32));
-		//m.forEach((k, v) -> tree.add(new Node(v, k)));
+		m.forEach((k, v) -> tree.add(new Node(v, k)));
+		tree.add(new Node(1, (short) 256));
 	}
 	
-	void encode(BitInputStream in, BitOutputStream out) {
+	public void encode(BitInputStream in, BitOutputStream out) {
 		
 	}
 	
@@ -35,10 +36,9 @@ public class HuffmanTree {
 		test.put((short) ' ', 2);
 		test.put((short) 'b', 2);
 		test.put((short) 'z', 1);
-		test.put((short) 256, 1);
 		
 		HuffmanTree ht = new HuffmanTree(test);
 		
-		System.out.println(ht);
+		System.out.println(ht.toString());
 	}
 }

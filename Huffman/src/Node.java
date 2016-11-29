@@ -4,10 +4,10 @@
  * @author Ella Nicolson and Rachel Swoap
  *
  */
-public class Node {
+public class Node implements Comparable<Node> {
 
 	public int freq;
-	public Short datum;
+	public short datum;
 	public Node left;
 	public Node right;
 	
@@ -20,14 +20,25 @@ public class Node {
 	
 	
 	public Node (int freq, Node left, Node right) {
-		new Node (freq, null, left, right);
+		this(freq, null, left, right);
 	}
 	
-	public Node (int freq, Short datum) {
-		new Node (freq, datum, null, null);	
+	public Node (int freq, short datum) {
+		this(freq, datum, null, null);	
 	}
 	
 	public String toString() {
 		return "" + "Frequency: " + freq + "; Datum: " + datum;
+	}
+
+	@Override
+	public int compareTo(Node obj) {
+		if (this.freq < obj.freq) {
+			return -1;
+		} else if (this.freq > obj.freq) {
+			return 1;
+		} else {
+			return 0;
+		}
 	}
 }
