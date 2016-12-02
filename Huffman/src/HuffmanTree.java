@@ -1,3 +1,4 @@
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -65,17 +66,20 @@ public class HuffmanTree {
 	}
 	
 	public void encode(BitInputStream in, BitOutputStream out) {
+		List<int[]> bits = new ArrayList<int[]>();
 		for (int c = 0; (c = in.readBits(8)) != -1;) {
 			short temp = (short) c;
-			int[] bits = huffCodes.get(temp);
-			for (int i = 0; i < bits.length; i++) {
-				out.writeBit(bits[i]);
+			bits.add(huffCodes.get(temp));
+		}
+		
+		for (int[] c : bits) {
+			for (int i = 0; i < c.length; i++) {
+				out.writeBit(c[i]);
 			}
-			
 		}
 	}
 	
-	public void decode(BitInputStream in, BitOutputStream out){
+	public void decode(BitInputStream in, BitOutputStream out) {
 		
 	}
 	
@@ -83,7 +87,7 @@ public class HuffmanTree {
 		return tree.toString();
 	}
 	
-	public static void main(String[] args) {
+	public static void main(String[] args) throws IOException {
 		Map<Short, Integer> test = new HashMap<Short, Integer>();
 		test.put((short) 'a', 3);
 		test.put((short) ' ', 2);
@@ -92,9 +96,15 @@ public class HuffmanTree {
 		
 		HuffmanTree ht = new HuffmanTree(test);
 		
-		System.out.println(ht.toString());
+//		System.out.println(ht.toString());
 		
-		ht.huffCodes.forEach((k, v) -> System.out.println((char) k.intValue() +
-				" " + Arrays.toString(v) + "\n"));
+//		ht.huffCodes.forEach((k, v) -> System.out.println((char) k.intValue() +
+//				" " + Arrays.toString(v) + "\n"));
+		
+		BitInputStream in = new BitInputStream("test1.txt");
+		BitOutputStream out = new BitOutputStream("test2.txt");
+		ht.encode(in, out);
+		in.close();
+		out.close();
 	}
 }
