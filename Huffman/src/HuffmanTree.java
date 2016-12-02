@@ -80,7 +80,27 @@ public class HuffmanTree {
 	}
 	
 	public void decode(BitInputStream in, BitOutputStream out) {
+		List<Integer> ret = new ArrayList<Integer>();
+		Node root = tree.peek();
+		for (int bit = 0; (bit = in.readBit()) != -1;) {
+			if (bit == 0) {
+				root = root.left;
+				if (root.datum != null) {
+					ret.add((int) root.datum);
+					root = tree.peek();
+				}
+			} else {
+				root = root.right;
+				if (root.datum != null) {
+					ret.add((int) root.datum);
+					root = tree.peek();
+				}
+			}
+		}
 		
+		for (int c : ret) {
+			out.writeBits(c, 8);
+		}
 	}
 	
 	public String toString() {
@@ -101,10 +121,14 @@ public class HuffmanTree {
 //		ht.huffCodes.forEach((k, v) -> System.out.println((char) k.intValue() +
 //				" " + Arrays.toString(v) + "\n"));
 		
-		BitInputStream in = new BitInputStream("test1.txt");
-		BitOutputStream out = new BitOutputStream("test2.txt");
+		BitInputStream in = new BitInputStream("originalText.txt");
+		BitOutputStream out = new BitOutputStream("encodedText.txt");
 		ht.encode(in, out);
 		in.close();
 		out.close();
+		
+		BitInputStream in2 = new BitInputStream("encodedText.txt");
+		BitOutputStream out2 = new BitOutputStream("decodedText.txt");
+		ht.decode(in2, out2);
 	}
 }
