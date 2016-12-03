@@ -19,7 +19,7 @@ public class GrinEncoder {
 		return m;
 	}
 	
-	public void encode(String infile, String outfile) throws IOException {
+	public static void encode(String infile, String outfile) throws IOException {
 		Map<Short, Integer> m = createFrequencyMap(infile);
 		
 		BitInputStream in = new BitInputStream(infile);
@@ -33,5 +33,8 @@ public class GrinEncoder {
 		
 		HuffmanTree ht = new HuffmanTree(m);
 		ht.encode(in, out);
+		
+		in.close();
+		out.close();
 	}
 }

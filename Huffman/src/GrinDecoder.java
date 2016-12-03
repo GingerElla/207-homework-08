@@ -1,4 +1,5 @@
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.Map;
 
 public class GrinDecoder {
@@ -16,19 +17,24 @@ public class GrinDecoder {
 		}
 		
 		int numCodes = in.readBits(32);
-		makeTable(in, numCodes);
+		m = makeTable(in, numCodes);
 		
 		ht = new HuffmanTree(m);
 		ht.decode(in, out);
+		
+		in.close();
+		out.close();
 	}
 	
-	private static void makeTable(BitInputStream in, int n) {
+	private static Map<Short, Integer> makeTable(BitInputStream in, int n) {
+		Map<Short, Integer> m = new HashMap<Short, Integer>();
 		for (int i = 0; i < n; i++) {
-			addEntry(in);
+			addEntry(in, m);
 		}
+		return m;
 	}
 	
-	private static void addEntry(BitInputStream in) {
+	private static void addEntry(BitInputStream in, Map<Short, Integer> m) {
 		short key = (short) in.readBits(16);
 		int val = in.readBits(32);
 		m.put(key, val);
