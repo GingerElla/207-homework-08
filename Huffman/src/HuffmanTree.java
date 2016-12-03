@@ -77,6 +77,11 @@ public class HuffmanTree {
 				out.writeBit(c[i]);
 			}
 		}
+		
+		int[] eof = huffCodes.get((short) 256);
+		for (int i = 0; i < eof.length; i++) {
+			out.writeBit(eof[i]);
+		}
 	}
 	
 	public void decode(BitInputStream in, BitOutputStream out) {
@@ -86,14 +91,22 @@ public class HuffmanTree {
 			if (bit == 0) {
 				root = root.left;
 				if (root.datum != null) {
-					ret.add((int) root.datum);
-					root = tree.peek();
+					if (root.datum == (short) 256) {
+						break;
+					} else {
+						ret.add((int) root.datum);
+						root = tree.peek();
+					}
 				}
 			} else {
 				root = root.right;
 				if (root.datum != null) {
-					ret.add((int) root.datum);
-					root = tree.peek();
+					if (root.datum == (short) 256) {
+						break;
+					} else {
+						ret.add((int) root.datum);
+						root = tree.peek();
+					}
 				}
 			}
 		}
@@ -107,28 +120,28 @@ public class HuffmanTree {
 		return tree.toString();
 	}
 	
-	public static void main(String[] args) throws IOException {
-		Map<Short, Integer> test = new HashMap<Short, Integer>();
-		test.put((short) 'a', 3);
-		test.put((short) ' ', 2);
-		test.put((short) 'b', 2);
-		test.put((short) 'z', 1);
-		
-		HuffmanTree ht = new HuffmanTree(test);
-		
+//	public static void main(String[] args) throws IOException {
+//		Map<Short, Integer> test = new HashMap<Short, Integer>();
+//		test.put((short) 'a', 3);
+//		test.put((short) ' ', 2);
+//		test.put((short) 'b', 2);
+//		test.put((short) 'z', 1);
+//		
+//		HuffmanTree ht = new HuffmanTree(test);
+//		
 //		System.out.println(ht.toString());
-		
+//		
 //		ht.huffCodes.forEach((k, v) -> System.out.println((char) k.intValue() +
 //				" " + Arrays.toString(v) + "\n"));
-		
-		BitInputStream in = new BitInputStream("originalText.txt");
-		BitOutputStream out = new BitOutputStream("encodedText.txt");
-		ht.encode(in, out);
-		in.close();
-		out.close();
-		
-		BitInputStream in2 = new BitInputStream("encodedText.txt");
-		BitOutputStream out2 = new BitOutputStream("decodedText.txt");
-		ht.decode(in2, out2);
-	}
+//		
+//		BitInputStream in = new BitInputStream("simpleTests/originalText.txt");
+//		BitOutputStream out = new BitOutputStream("simpleTests/encodedText.txt");
+//		ht.encode(in, out);
+//		in.close();
+//		out.close();
+//		
+//		BitInputStream in2 = new BitInputStream("simpleTests/encodedText.txt");
+//		BitOutputStream out2 = new BitOutputStream("simpleTests/decodedText.txt");
+//		ht.decode(in2, out2);
+//	}
 }
