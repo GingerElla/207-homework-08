@@ -9,23 +9,22 @@ public class Node implements Comparable<Node> {
 	public Short datum;
 	public Node left;
 	public Node right;
-	
-	public Node (int freq, Short datum, Node left, Node right) {
+
+	public Node(int freq, Short datum, Node left, Node right) {
 		this.freq = freq;
 		this.datum = datum;
 		this.left = left;
-		this.right = right;	
+		this.right = right;
 	}
-	
-	
-	public Node (int freq, Node left, Node right) {
+
+	public Node(int freq, Node left, Node right) {
 		this(freq, null, left, right);
 	}
-	
-	public Node (int freq, Short datum) {
-		this(freq, datum, null, null);	
+
+	public Node(int freq, Short datum) {
+		this(freq, datum, null, null);
 	}
-	
+
 	public String toStringH(String soFar) {
 		if (datum != null) {
 			soFar += "Frequency: " + freq + "; Datum: " + (char) (short) datum + "\n";
@@ -34,10 +33,10 @@ public class Node implements Comparable<Node> {
 			soFar += left.toStringH("");
 			soFar += right.toStringH("");
 		}
-		
+
 		return soFar;
 	}
-	
+
 	public String toString() {
 		return toStringH("");
 	}
